@@ -1,0 +1,118 @@
+.field-error {
+    border-color: #ef4444;
+
+}
+
+.field-error:focus {
+    border-color: #ef4444;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.5);
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.field-error:focus-visible {
+    border-color: #ef4444;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.5);
+}
+
+.carousel-container {
+    perspective: 1000px;
+    touch-action: pan-y pinch-zoom;
+}
+
+.carousel-track {
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.carousel-item {
+    backface-visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.carousel-item.active {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+}
+
+.carousel-item.hidden,
+.carousel-item.prev,
+.carousel-item.next {
+    opacity: 0;
+    transform: scale(0.8) translateX(-100%) translateZ(-100px);
+}
+
+.scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-top:hover {
+    transform: scale(1.1);
+}
+
+.scroll-top:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    .nav-overlay.active {
+        display: block;
+    }
+
+    .scroll-top {
+        width: 52px;
+        height: 52px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 22px;
+    }
+}
+.menu-toggle.active .menu-toggle__line:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+.menu-toggle.active .menu-toggle__line:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.active .menu-toggle__line:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
