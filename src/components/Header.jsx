@@ -64,7 +64,7 @@ const Header = () => {
 
           {/* Навигация */}
           <nav
-              className={`fixed top-0 right-0 h-full w-[50%] md:w-full bg-white/75 md:bg-transparent z-[1000] transform transition-transform duration-300
+              className={`fixed top-0 right-0 h-full w-[50%] bg-stone-100 md:w-full z-[1000] transform transition-transform duration-300
               ${isMenuOpen ? "translate-x-0" : "translate-x-full md:translate-x-0 md:static md:w-auto md:h-auto"}`}
           >
             <ul className="flex flex-col text-center mt-20 md:mt-0 md:flex-row md:justify-start md:ml-8 md:space-x-8 xl:ml-16 xl:space-x-10">
@@ -80,7 +80,7 @@ const Header = () => {
               </li>
               <li>
                 <a
-                  href="event.html"
+                  href="index.html#event"
                   className={`block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/event.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu}
                 >
@@ -98,7 +98,7 @@ const Header = () => {
               </li>
               <li>
                 <a
-                  href="delivery.html"
+                  href="404.html"
                   className={`  block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/delivery.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu}
                 >
@@ -107,7 +107,7 @@ const Header = () => {
               </li>
               <li className="md:hidden lg:block">
                 <a
-                  href="about.html"
+                  href="index.html#aboutus"
                   className={`  block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/about.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu}
                 >

@@ -83,6 +83,24 @@
     transform: scale(0.95);
 }
 
+.nav-button {
+    transition: all 0.3s;
+    background: rgba(146, 141, 141, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-button:active {
+    transform: scale(0.95);
+}
+
+@media (hover: hover) {
+    .nav-button:hover {
+        background: rgba(146, 141, 141, 0.9);
+        transform: scale(1.1);
+    }
+}
+
 @media (max-width: 768px) {
     .nav-overlay {
         display: none;

@@ -19,7 +19,7 @@ const products = [
 
 const MenuPage = () => {
   const [filter, setFilter] = useState("Все");
-  const [cart, setCart] = useState({});
+  /**/const [cart, setCart] = useState({});
   /*const { addToCart } = useCart();
    const { updateCount } = useCart();
   const [addToCart, updateCount] = useCart({});*/
@@ -66,10 +66,7 @@ const MenuPage = () => {
           </div>
 
           {/* Сетка */}
-          <ProductGrid
-            products={filteredProducts}
-            cart={cart}
-          />
+          <ProductGrid products={filteredProducts}/>
         </div>
       </main>
       <Footer />

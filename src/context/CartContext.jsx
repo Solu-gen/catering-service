@@ -36,19 +36,11 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  //const clearCart = () => setCart({});
-{/*
-  return (
-    <CartContext.Provider value={{ cart, totalCount, addToCart, updateCount, clearCart }}>
-      {children}
-    </CartContext.Provider>
-  );
-  */}
   return (
     <CartContext.Provider value={{ cart, totalCount, addToCart, updateCount }}>
       {children}
     </CartContext.Provider>
-  );            
+  );
 };
 
 export const useCart = () => {
