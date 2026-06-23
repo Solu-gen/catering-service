@@ -2,7 +2,7 @@
 import { CartProvider } from '../context/CartContext';
 import Header from '../components/Header';
 import Footer from "../components/Footer";
-//import { useCart } from '../context/CartContext';
+import ScrollToTopButton from '../components/ScrollToTopButton';
 
 // Основной контент страницы
 const HomeContent = () => {
@@ -684,6 +684,7 @@ const Home = () => {
       <Header />
       <HomeContent />
       <Footer />
+      <ScrollToTopButton />
     </CartProvider>
   );
 };

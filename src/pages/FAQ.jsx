@@ -1,6 +1,7 @@
 import { CartProvider } from '../context/CartContext';
 import Header from '../components/Header';
 import Footer from "../components/Footer";
+import ScrollToTopButton from '../components/ScrollToTopButton';
 
 // Основной контент страницы
 const FAQContent = () => {
@@ -165,24 +166,20 @@ const FAQContent = () => {
                     class="relative overflow-hidden grid grid-cols-1 items-center justify-center lg:h-[80vh] rounded-xl sm:rounded-2xl  bg-stone-500">
                     <div class="px-6 py-10 lg:px-6 lg:py-8">
                         <div class="text-center lg:text-left tracking-tight text-white">
-                            <h2 class="text-2xl  font-bold"> Подберем идеальное решение
-                                для вашего события
-                            </h2>
+                            <h2 class="text-2xl  font-bold"> Подберем идеальное решение для вашего события</h2>
                             <p class="text-lg py-4">Заполните форму, и мы ответим на все ваши вопросы</p>
                         </div>
                         <div class="min-[561px]-pt-8">
                             <form class="space-y-4">
                                 <div class="space-y-2">
-                                    <label for="name" class="block text-base font-medium text-white">Ваше
-                                        имя</label>
+                                    <label for="name" class="block text-base font-medium text-white">Ваше имя</label>
                                     <div class="mt-2">
                                         <input id="name" type="text" name="name" placeholder="Фамилия имя"
                                             class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-lg text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-stone-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                                     </div>
                                 </div>
                                 <div class="space-y-2">
-                                    <label for="phone" class="block text-base font-medium text-white">Номер
-                                        телефона</label>
+                                    <label for="phone" class="block text-base font-medium text-white">Номер телефона</label>
                                     <div class="mt-2">
                                         <input id="phone" type="text" name="phone" placeholder="+7 (000) 000-00-00"
                                             class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-lg text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-stone-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
@@ -219,6 +216,7 @@ const FAQ = () => {
       <Header />
       <FAQContent />
       <Footer />
+      <ScrollToTopButton />
     </CartProvider>
   );
 };

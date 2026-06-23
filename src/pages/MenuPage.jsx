@@ -4,6 +4,7 @@ import { CartProvider } from '../context/CartContext';
 import ProductGrid from "../components/ProductGrid";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ScrollToTopButton from '../components/ScrollToTopButton';
 
 const products = [
   { id: 1, title: "БРУСКЕТТА №1", category: "Брускетты", image: "menu-img/img1.jpg" },

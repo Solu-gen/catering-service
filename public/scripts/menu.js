@@ -1,13 +1,13 @@
-const menuToggle = document.getElementById('menuToggle');
+/*const menuToggle = document.getElementById('menuToggle');
 const mainNav = document.getElementById('mainNav');
-
+*/
 // Создаем оверлей для меню
 const navOverlay = document.createElement('div');
 navOverlay.className = 'nav-overlay';
 document.body.appendChild(navOverlay);
 
 // Функция открытия/закрытия меню
-function toggleMenu() {
+/*function toggleMenu() {
     const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
 
     // Переключаем состояния
@@ -46,10 +46,10 @@ window.addEventListener('resize', () => {
     if (window.innerWidth > 768 && mainNav.classList.contains('active')) {
         toggleMenu();
     }
-});
+});*/
 
 // Кнопка "Наверх"
-const scrollTopButton = document.getElementById('scrollTop');
+/*const scrollTopButton = document.getElementById('scrollTop');
 
 // Показываем кнопку после скролла
 window.addEventListener('scroll', () => {
@@ -66,7 +66,7 @@ scrollTopButton.addEventListener('click', () => {
         top: 0,
         behavior: 'smooth'
     });
-});
+});*/
 
 
 function toggleAccordion(button) {
