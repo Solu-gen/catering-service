@@ -67,59 +67,58 @@ const Header = () => {
               className={`fixed top-0 right-0 h-full w-[50%] bg-stone-100 md:w-full z-[1000] transform transition-transform duration-300
               ${isMenuOpen ? "translate-x-0" : "translate-x-full md:translate-x-0 md:static md:w-auto md:h-auto"}`}
           >
-            <ul className="flex flex-col text-center mt-20 md:mt-0 md:flex-row md:justify-start md:ml-8 md:space-x-8 xl:ml-16 xl:space-x-10">
+            <ul className="text-lg flex flex-col md:text-center max-[768px]:pl-[12%] text-gray-900 mt-16 md:mt-0 md:flex-row md:space-x-8 xl:ml-6 xl:space-x-10">
             {/*<ul className="flex flex-col text-center pt-20 px-6 gap-0 md:flex md:justify-start md:ml-8 md:space-x-8 xl:ml-16 xl:space-x-10 md:pt-0 md:px-0">*/}
               <li>
                 <a
                   href="menu.html"
-                  className={`block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/menu.html') ? 'active text-indigo-600' : ''}`}
-                  onClick={closeMenu}
-                >
+                  className={`flex md:hidden justify-start items-center  border-y border-gray-200 py-4 font-medium transition-all duration-200 hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/menu.html') ? 'active text-indigo-600' : ''}`}
+                  onClick={closeMenu} >
+                  ВОЙТИ
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href="menu.html"
+                  className={`block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/menu.html') ? 'active text-indigo-600' : ''}`}
+                  onClick={closeMenu} >
                   МЕНЮ
                 </a>
               </li>
               <li>
-                <a
-                  href="index.html#event"
-                  className={`block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/event.html') ? 'active text-indigo-600' : ''}`}
-                  onClick={closeMenu}
-                >
+                <a href="index.html#event"
+                  className={`block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/event.html') ? 'active text-indigo-600' : ''}`}
+                  onClick={closeMenu} >
                   СОБЫТИЕ
                 </a>
               </li>
               <li>
-                <a
-                  href="contacts.html"
-                  className={`  block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/contacts.html') ? 'active text-indigo-600' : ''}`}
-                  onClick={closeMenu}
-                >
+                <a href="contacts.html"
+                  className={`  block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/contacts.html') ? 'active text-indigo-600' : ''}`}
+                  onClick={closeMenu} >
                   КОНТАКТЫ
                 </a>
               </li>
-              <li>
-                <a
-                  href="404.html"
-                  className={`  block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/delivery.html') ? 'active text-indigo-600' : ''}`}
-                  onClick={closeMenu}
-                >
+              <li className="max-[824px]:hidden lg:block">
+                <a href="404.html"
+                  className={`  block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/delivery.html') ? 'active text-indigo-600' : ''}`}
+                  onClick={closeMenu} >
                   ДОСТАВКА И ОПЛАТА
                 </a>
               </li>
               <li className="md:hidden lg:block">
-                <a
-                  href="index.html#aboutus"
-                  className={`  block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/about.html') ? 'active text-indigo-600' : ''}`}
-                  onClick={closeMenu}
-                >
+                <a href="index.html#aboutus"
+                  className={`  block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/about.html') ? 'active text-indigo-600' : ''}`}
+                  onClick={closeMenu} >
                   О НАС
                 </a>
               </li>
               <li className="md:hidden lg:block">
-                <a
-                  href="faq.html"
-                  className={`  block w-full py-4 border-b border-gray-200 text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/faq.html') ? 'active text-indigo-600' : ''}`}
-                  onClick={closeMenu}
-                >
+                <a href="faq.html"
+                  className={`  block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/faq.html') ? 'active text-indigo-600' : ''}`}
+                  onClick={closeMenu} >
                   FAQ
                 </a>
               </li>
@@ -128,14 +127,12 @@ const Header = () => {
 
           {/* Правая часть */}
           <div className="flex items-center justify-self-end ml-auto lg:space-x-8">
-            <div className="hidden lg:flex lg:items-center lg:space-x-8">
+            <div className="hidden md:flex lg:items-center lg:space-x-8">
               <p className="hidden xl:block text-lg font-medium text-gray-900 whitespace-nowrap transition-all duration-200 rounded hover:text-indigo-600">
                 +7 (000)-000-00-00
               </p>
-              <a
-                href="login.html"
-                className="text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-              >
+              <a href="login.html"
+                className="text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
                 ВОЙТИ
               </a>
             </div>

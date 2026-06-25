@@ -1,103 +1,31 @@
-//import React from 'react';
 import { CartProvider } from '../context/CartContext';
 import Header from '../components/Header';
 import Footer from "../components/Footer";
 import ScrollToTopButton from '../components/ScrollToTopButton';
+import Carousel from '../components/Carousel';
+import '../context/style.css';
 
 // Основной контент страницы
 const HomeContent = () => {
-  //const { addToCart } = useCart();
+  const slides = [
+    { image: 'home-img/img1.jpg', title: 'ФУРШЕТНЫЕ НАБОРЫ', description: 'Для любого вашего события с выгодой до 10%' },
+    { image: 'home-img/img2.png', title: 'ЛЮБОВЬ В КАЖДОЙ КОРОБОЧКЕ', description: 'Закуски, которые сближают' },
+    { image: 'home-img/img3.jpg', title: 'ФРУКТОВЫЙ СЕТ В ПОДАРОК', description: 'На день рождения, смотрите другие наши акции' },
+  ];
 
   return (
     <main class="p-8 bg-stone-100">
         <section class="mb-16 lg:mb-20 flex justify-center overflow-hidden">
             <div class="w-full max-w-[1600px] mx-auto">
-                <div class="carousel-container relative">
-                    <button class="nav-button absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex 
-                        items-center justify-center z-20 text-white touch-manipulation" onclick="prevSlide()"
-                        title="Previous slide">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
-                            </path>
-                        </svg>
-                    </button>
-
-                    <button class="nav-button absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full 
-                    flex items-center justify-center z-20 text-white touch-manipulation" onclick="nextSlide()"
-                        title="Next slide">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                            </path>
-                        </svg>
-                    </button>
-
-                    <div class="carousel-track relative h-[80vh] overflow-hidden">
-                        <a href="#" class="carousel-item active absolute top-0 left-0 w-full h-full">
-                            <div class="w-full h-full">
-                                <div class="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative group">
-                                    <img src="home-img/img1.jpg" alt="ФУРШЕТНЫЕ НАБОРЫ" class="absolute inset-0 w-full h-full object-cover 
-                                    transition-transform duration-500 group-hover:scale-110" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-br from-violet-500/40 to-purple-500/40 mix-blend-overlay">
-                                    </div>
-                                    <div
-                                        class="absolute inset-x-0 bottom-0 p-8 sm:p-16 bg-gradient-to-t from-stone-800 via-stone-450 to-transparent">
-                                        <h3 class="text-white text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
-                                            ФУРШЕТНЫЕ НАБОРЫ</h3>
-                                        <p class="text-gray-200 text-sm sm:text-lg md:text-lg max-w-2xl">Для любого
-                                            вашего события с выгодой до 10%</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="carousel-item next absolute top-0 left-0 w-full h-full">
-                            <div class="w-full h-full">
-                                <div class="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative group">
-                                    <img src="home-img/img2.png" alt="Закуски, которые сближают"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-br from-fuchsia-500/40 to-pink-500/40 mix-blend-overlay">
-                                    </div>
-                                    <div
-                                        class="absolute inset-x-0 bottom-0 p-8 sm:p-16 bg-gradient-to-t from-stone-800 via-stone-450 to-transparent">
-                                        <h3 class="text-white text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
-                                            ЛЮБОВЬ В КАЖДОЙ КОРОБОЧКЕ</h3>
-                                        <p class="text-gray-200 text-sm sm:text-lg md:text-lg max-w-2xl">Закуски,
-                                            которые сближают</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="carousel-item hidden absolute top-0 left-0 w-full h-full">
-                            <div class="w-full h-full">
-                                <div class="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative group">
-                                    <img src="home-img/img3.jpg" alt="ФРУКТОВЫЙ СЕТ В ПОДАРОК"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-br from-pink-500/40 to-rose-500/40 mix-blend-overlay">
-                                    </div>
-                                    <div
-                                        class="absolute inset-x-0 bottom-0 p-8 sm:p-16 bg-gradient-to-t from-stone-800 via-stone-450 to-transparent">
-                                        <h3 class="text-white text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
-                                            ФРУКТОВЫЙ СЕТ В ПОДАРОК</h3>
-                                        <p class="text-gray-200 max-w-2xl">На день
-                                            рождения, смотрите другие наши акции</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                <Carousel slides={slides} autoPlayInterval={5000} />
             </div>
         </section>
 
         <section id="event">
             <div class="grid grid-cols-2 pb-4 sm:pb-8 space-x-6">
                 <h2 class="text-black text-3xl md:text-4xl font-bold">ВЫБЕРИ СВОЙ ФОРМАТ</h2>
-                <p class="self-start">Кейтеринг в Москве для корпорвтивных и домашних мероприятитй. Организуем банкет
-                    под любую ситуацию.</p>
+                <p class="self-start">
+                    Кейтеринг в Москве для корпорвтивных и домашних мероприятитй. Организуем банкет под любую ситуацию.</p>
             </div>
 
             <div

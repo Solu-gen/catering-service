@@ -2,6 +2,7 @@ import { CartProvider } from '../context/CartContext';
 import Header from '../components/Header';
 import Footer from "../components/Footer";
 import ScrollToTopButton from '../components/ScrollToTopButton';
+import '../context/style.css';
 
 // Основной контент страницы
 const ContactsPageContent = () => {
