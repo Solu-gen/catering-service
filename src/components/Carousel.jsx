@@ -64,7 +64,7 @@ const Carousel = ({ slides, autoPlayInterval = 5000 }) => {
       <button
         onClick={prevSlide}
         className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-[rgba(146,141,141,0.5)] backdrop-blur-md rounded-full flex items-center justify-center z-20 text-white touch-manipulation duration-300"
-        aria-label="Предыдущий">
+        aria-label="Предыдущий" >
         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
           </path>
@@ -73,10 +73,12 @@ const Carousel = ({ slides, autoPlayInterval = 5000 }) => {
 
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full w-10 h-10 flex items-center justify-center"
-        aria-label="Следующий"
-      >
-        ›
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-[rgba(146,141,141,0.5)] backdrop-blur-md rounded-full flex items-center justify-center z-20 text-white touch-manipulation duration-300"
+        aria-label="Следующий" >
+         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+            </path>
+          </svg>
       </button>
 
       {/* Индикаторы */}

@@ -4,8 +4,10 @@ import { useCart } from '../context/CartContext';
 const Header = () => {
   const { totalCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const menuRef = useRef(null);
   const toggleRef = useRef(null);
+  const loginRef = useRef(null);
 
   // Определяем активную ссылку по текущему пути
   const isActive = (path) => {
@@ -14,6 +16,12 @@ const Header = () => {
 
   const toggleMenu = () => setIsMenuOpen(prev => !prev);
   const closeMenu = () => setIsMenuOpen(false);
+
+ const toggleLogin = () => {
+    setIsLoginOpen(prev => !prev);
+    if (isMenuOpen) closeMenu();
+  };
+  const closeLogin = () => setIsLoginOpen(false);
 
   // Закрытие по клику вне меню
   useEffect(() => {
@@ -26,22 +34,26 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen]);
 
+  // Блокировка скролла при открытом меню или форме
+  useEffect(() => {
+    const isOpen = isMenuOpen || isLoginOpen;
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMenuOpen, isLoginOpen]);
+
   // Закрытие по Escape
   useEffect(() => {
     const handleEsc = (e) => {
-      if (e.key === 'Escape' && isMenuOpen) closeMenu();
+      if (e.key === 'Escape') {
+        if (isLoginOpen) closeLogin();
+        if (isMenuOpen) closeMenu();
+      }
     };
     document.addEventListener('keydown', handleEsc);
     return () => document.removeEventListener('keydown', handleEsc);
-  }, [isMenuOpen]);
+  }, [isMenuOpen, isLoginOpen]);
 
-  // Блокировка скролла
-  useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [isMenuOpen]);
-
-  // Закрытие при изменении размера окна (если >768px)
+  // Закрытие меню при изменении размера окна (>768px)
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 768 && isMenuOpen) closeMenu();
@@ -64,21 +76,21 @@ const Header = () => {
 
           {/* Навигация */}
           <nav
-              className={`fixed top-0 right-0 h-full w-[50%] bg-stone-100 md:w-full z-[1000] transform transition-transform duration-300
+              className={`fixed top-0 right-0 h-full w-full sm:w-[50%] bg-stone-100 md:w-full z-[1000] transform transition-transform duration-300
               ${isMenuOpen ? "translate-x-0" : "translate-x-full md:translate-x-0 md:static md:w-auto md:h-auto"}`}
           >
             <ul className="text-lg flex flex-col md:text-center max-[768px]:pl-[12%] text-gray-900 mt-16 md:mt-0 md:flex-row md:space-x-8 xl:ml-6 xl:space-x-10">
             {/*<ul className="flex flex-col text-center pt-20 px-6 gap-0 md:flex md:justify-start md:ml-8 md:space-x-8 xl:ml-16 xl:space-x-10 md:pt-0 md:px-0">*/}
-              <li>
-                <a
-                  href="menu.html"
-                  className={`flex md:hidden justify-start items-center  border-y border-gray-200 py-4 font-medium transition-all duration-200 hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/menu.html') ? 'active text-indigo-600' : ''}`}
-                  onClick={closeMenu} >
+              <li className="md:hidden">
+                <button
+                  onClick={() => { toggleLogin(); closeMenu(); }}
+                  className="flex justify-start items-center border-y border-gray-200 py-4 font-medium transition-all duration-200 hover:text-indigo-600 hover:pl-2.5 focus:outline-none w-full"
+                >
                   ВОЙТИ
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
                   </svg>
-                </a>
+                </button>
               </li>
               <li>
                 <a href="menu.html"
@@ -126,15 +138,17 @@ const Header = () => {
           </nav>
 
           {/* Правая часть */}
-          <div className="flex items-center justify-self-end ml-auto lg:space-x-8">
+          <div className="flex items-center justify-self-end ml-auto space-x-8">
             <div className="hidden md:flex lg:items-center lg:space-x-8">
               <p className="hidden xl:block text-lg font-medium text-gray-900 whitespace-nowrap transition-all duration-200 rounded hover:text-indigo-600">
                 +7 (000)-000-00-00
               </p>
-              <a href="login.html"
-                className="text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
+              <button
+                onClick={toggleLogin}
+                className="text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+              >
                 ВОЙТИ
-              </a>
+              </button>
             </div>
 
             <div className="flex items-center justify-end space-x-5 z-[1001]">
@@ -151,9 +165,6 @@ const Header = () => {
               </button>
 
               {/* Бургер */}
-              {/* className={`menu-toggle md:hidden flex flex-col justify-between w-11 h-[44px] bg-transparent p-3 z-[1001] ${isMenuOpen ? 'active' : ''}`}
-                onClick={toggleMenu}
-               */}
               <button
                 ref={toggleRef}
                 className={`menu-toggle md:hidden flex flex-col justify-between w-11 h-[44px] bg-transparent p-3  ${isMenuOpen ? 'active' : ''}`}
@@ -170,8 +181,61 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Оверлей */}
+      {/* Оверлей 
       {isMenuOpen && (
+        <div className="fixed inset-0 bg-black/50 z-[999] md:hidden" onClick={closeMenu}></div>
+      )}*/}
+      {/* Окно входа */}
+      {isLoginOpen && (
+        <div className="fixed top-0 right-0 h-full w-full sm:w-[50%] bg-stone-100 md:w-full z-[1002] transform transition-transform duration-300" onClick={closeLogin}>
+          <div
+            ref={loginRef}
+            className="p-8 w-full relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Крестик закрытия */}
+            <button
+              onClick={closeLogin}
+              className="absolute top-4 right-4 text-gray-900 hover:text-gray-600"
+              aria-label="Закрыть форму входа"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Заголовок */}
+            <h2 className="text-2xl font-bold text-center mb-6">Вход или регистрация</h2>
+
+            {/* Поле телефона */}
+            <div className="mb-4">
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                Телефон
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                placeholder="+7 (___) ___-__-__"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+              />
+            </div>
+
+            {/* Кнопка "Продолжить" */}
+            <button
+              className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={() => {
+                // Здесь будет логика отправки
+                alert('Форма отправлена (имитация)');
+                closeLogin();
+              }}
+            >
+              Продолжить
+            </button>
+          </div>
+        </div>
+      )}
+      {/* Оверлей */}
+      {(isMenuOpen || isLoginOpen) && (
         <div className="fixed inset-0 bg-black/50 z-[999] md:hidden" onClick={closeMenu}></div>
       )}
     </header>
