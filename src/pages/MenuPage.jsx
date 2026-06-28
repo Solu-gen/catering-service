@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useCart } from '../context/CartContext';
 import { CartProvider } from '../context/CartContext';
 import ProductGrid from "../components/ProductGrid";
@@ -6,7 +6,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import '../context/style.css';
-
+/*
 const products = [
   { id: 1, title: "БРУСКЕТТА №1", category: "Брускетты", image: "menu-img/img1.jpg" },
   { id: 2, title: "БРУСКЕТТА №2", category: "Брускетты", image: "menu-img/img2.jpg" },
@@ -17,11 +17,17 @@ const products = [
   { id: 7, title: "ТАРТАЛЕТКИ №1", category: "Тарталетки", image: "menu-img/tar1.jpg" },
   { id: 8, title: "ТАРТАЛЕТКИ №2", category: "Тарталетки", image: "menu-img/tar2.jpg" },
   { id: 9, title: "ТАРТАЛЕТКИ №3", category: "Тарталетки", image: "menu-img/tar3.jpg" },
-];
+];*/
+
 
 const MenuPage = () => {
+  const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState("Все");
   const [cart, setCart] = useState({});
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/products/").then(res => res.json()).then(data => setProducts(data));
+  }, []);
 
   // фильтрация
   const filteredProducts = useMemo(() => {

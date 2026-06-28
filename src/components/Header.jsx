@@ -9,6 +9,11 @@ const Header = () => {
   const toggleRef = useRef(null);
   const loginRef = useRef(null);
 
+  const [phone, setPhone] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+
   // Определяем активную ссылку по текущему пути
   const isActive = (path) => {
     return window.location.pathname === path;
@@ -17,7 +22,7 @@ const Header = () => {
   const toggleMenu = () => setIsMenuOpen(prev => !prev);
   const closeMenu = () => setIsMenuOpen(false);
 
- const toggleLogin = () => {
+  const toggleLogin = () => {
     setIsLoginOpen(prev => !prev);
     if (isMenuOpen) closeMenu();
   };
@@ -62,6 +67,149 @@ const Header = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [isMenuOpen]);
 
+  // Проверка авторизации при загрузке страницы
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) return;
+
+    fetch("http://127.0.0.1:8000/api/auth/me/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          return null;
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          setUser(data);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  // Функция входа
+  const handleLogin = async () => {
+    if (!phone.trim()) {
+      alert("Введите номер телефона");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/auth/login/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone_number: phone,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(
+          data.phone_number?.[0] ||
+          data.detail ||
+          "Ошибка входа"
+        );
+        return;
+      }
+
+      localStorage.setItem(
+        "access_token",
+        data.access
+      );
+
+      localStorage.setItem(
+        "refresh_token",
+        data.refresh
+      );
+
+      setUser(data.user);
+
+      closeLogin();
+
+      alert("Вход выполнен");
+    } catch (error) {
+      console.error(error);
+      alert("Не удалось подключиться к серверу");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Функция регистрации
+  const handleRegister = async () => {
+    if (!phone.trim()) {
+      alert("Введите номер телефона");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/auth/register/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone_number: phone,
+            name: "",
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(
+          data.phone_number?.[0] ||
+          "Ошибка регистрации"
+        );
+        return;
+      }
+
+      localStorage.setItem(
+        "access_token",
+        data.access
+      );
+
+      localStorage.setItem(
+        "refresh_token",
+        data.refresh
+      );
+
+      setUser(data.user);
+
+      closeLogin();
+
+      alert("Регистрация выполнена");
+    } catch (error) {
+      console.error(error);
+      alert("Не удалось подключиться к серверу");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <header className="sticky top-0 bg-stone-100 z-[1000]">
       <div className="flex items-center px-4 mx-auto sm:px-6 lg:px-8 xl:px-12">
@@ -76,13 +224,13 @@ const Header = () => {
 
           {/* Навигация */}
           <nav
-              className={`fixed top-0 right-0 h-full w-full sm:w-[50%] bg-stone-100 md:w-full z-[1000] transform transition-transform duration-300
+            className={`fixed top-0 right-0 h-full w-full sm:w-[50%] bg-stone-100 md:w-full z-[1000] transform transition-transform duration-300
               ${isMenuOpen ? "translate-x-0" : "translate-x-full md:translate-x-0 md:static md:w-auto md:h-auto"}`}
           >
             <ul className="text-lg flex flex-col md:text-center max-[768px]:pl-[12%] text-gray-900 mt-16 md:mt-0 md:flex-row md:space-x-8 xl:ml-6 xl:space-x-10">
-            {/*<ul className="flex flex-col text-center pt-20 px-6 gap-0 md:flex md:justify-start md:ml-8 md:space-x-8 xl:ml-16 xl:space-x-10 md:pt-0 md:px-0">*/}
+              {/*<ul className="flex flex-col text-center pt-20 px-6 gap-0 md:flex md:justify-start md:ml-8 md:space-x-8 xl:ml-16 xl:space-x-10 md:pt-0 md:px-0">*/}
               <li className="md:hidden">
-                <button
+                {/*<button
                   onClick={() => { toggleLogin(); closeMenu(); }}
                   className="flex justify-start items-center border-y border-gray-200 py-4 font-medium transition-all duration-200 hover:text-indigo-600 hover:pl-2.5 focus:outline-none w-full"
                 >
@@ -90,7 +238,22 @@ const Header = () => {
                   <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
                   </svg>
-                </button>
+                </button>*/}
+
+                {user ? (
+                  <span className="text-lg font-medium text-indigo-600">
+                    ЛИЧНЫЙ КАБИНЕТ
+                  </span>
+                ) : (
+                  <button
+                    onClick={toggleLogin}
+                    className="text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600"
+                  >
+                    ВОЙТИ
+                  </button>
+                )}
+
+
               </li>
               <li>
                 <a href="menu.html"
@@ -108,28 +271,28 @@ const Header = () => {
               </li>
               <li>
                 <a href="contacts.html"
-                  className={`  block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/contacts.html') ? 'active text-indigo-600' : ''}`}
+                  className={`block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/contacts.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu} >
                   КОНТАКТЫ
                 </a>
               </li>
               <li className="max-[824px]:hidden lg:block">
-                <a href="404.html"
-                  className={`  block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/delivery.html') ? 'active text-indigo-600' : ''}`}
+                <a href="fof.html"
+                  className={`block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/delivery.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu} >
                   ДОСТАВКА И ОПЛАТА
                 </a>
               </li>
               <li className="md:hidden lg:block">
                 <a href="index.html#aboutus"
-                  className={`  block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/about.html') ? 'active text-indigo-600' : ''}`}
+                  className={`block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/about.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu} >
                   О НАС
                 </a>
               </li>
-              <li className="md:hidden lg:block">
+              <li className="md:hidden min-[1095px]:block">
                 <a href="faq.html"
-                  className={`  block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/faq.html') ? 'active text-indigo-600' : ''}`}
+                  className={`block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/faq.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu} >
                   FAQ
                 </a>
@@ -140,20 +303,33 @@ const Header = () => {
           {/* Правая часть */}
           <div className="flex items-center justify-self-end ml-auto space-x-8">
             <div className="hidden md:flex lg:items-center lg:space-x-8">
-              <p className="hidden xl:block text-lg font-medium text-gray-900 whitespace-nowrap transition-all duration-200 rounded hover:text-indigo-600">
+              <p className="hidden min-[1385px]:block text-lg font-medium text-gray-900 whitespace-nowrap transition-all duration-200 rounded hover:text-indigo-600">
                 +7 (000)-000-00-00
               </p>
-              <button
+              {/*<button
                 onClick={toggleLogin}
                 className="text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               >
                 ВОЙТИ
-              </button>
+              </button>*/}
+              {user ? (
+                <span className="text-lg font-medium whitespace-nowrap text-indigo-600">
+                  ЛИЧНЫЙ КАБИНЕТ
+                </span>
+              ) : (
+                <button
+                  onClick={toggleLogin}
+                  className="text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600"
+                >
+                  ВОЙТИ
+                </button>
+              )}
+
             </div>
 
             <div className="flex items-center justify-end space-x-5 z-[1001]">
               {/* Корзина */}
-              <button type="button" className="relative p-2 -m-2 text-gray-900 transition-all duration-200 hover:text-indigo-600">
+              <a href="cart.html" className="relative p-2 -m-2 text-gray-900 transition-all duration-200 hover:text-indigo-600">
                 <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
@@ -162,7 +338,7 @@ const Header = () => {
                     {totalCount}
                   </span>
                 )}
-              </button>
+              </a>
 
               {/* Бургер */}
               <button
@@ -181,62 +357,95 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Оверлей 
-      {isMenuOpen && (
-        <div className="fixed inset-0 bg-black/50 z-[999] md:hidden" onClick={closeMenu}></div>
-      )}*/}
       {/* Окно входа */}
       {isLoginOpen && (
-        <div className="fixed top-0 right-0 h-full w-full sm:w-[50%] bg-stone-100 md:w-full z-[1002] transform transition-transform duration-300" onClick={closeLogin}>
+        <div className="fixed bg-stone-100 top-0 right-0 h-full w-full sm:w-[50%] max-w-[500px] z-[1002]" onClick={closeLogin}>
           <div
             ref={loginRef}
-            className="p-8 w-full relative"
+            className="px-8 flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Крестик закрытия */}
             <button
               onClick={closeLogin}
-              className="absolute top-4 right-4 text-gray-900 hover:text-gray-600"
+              className="flex py-4 justify-end text-black hover:text-indigo-600"
               aria-label="Закрыть форму входа"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
-            {/* Заголовок */}
-            <h2 className="text-2xl font-bold text-center mb-6">Вход или регистрация</h2>
+            <div className="flex flex-col items-center">
+              {/* Заголовок */}
+              <h2 className="whitespace-nowrap text-2xl font-bold mb-6">Вход или регистрация</h2>
 
-            {/* Поле телефона */}
-            <div className="mb-4">
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                Телефон
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                placeholder="+7 (___) ___-__-__"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-              />
+              {/* Поле телефона */}
+              <div className="mb-4 w-[80%]">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  Телефон
+                </label>
+                {/*<input
+                  type="tel"
+                  id="phone"
+                  placeholder="+7 (___) ___-__-__"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                />
+
+               */}
+                <input
+                  type="tel"
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+7 (___) ___-__-__"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                />
+
+              </div>
+
+              {/* Кнопка "Продолжить" */}
+              {/*<button
+                className="w-[80%] py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={handleLogin} >
+                Продолжить
+              </button>*/}
+              <button
+                className="w-[80%] py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700"
+                onClick={handleLogin}
+                disabled={loading}
+              >
+                {loading ? "Загрузка..." : "Войти"}
+              </button>
+
+              <button
+                className="w-[80%] mt-3 py-3 border border-indigo-600 text-indigo-600 font-medium rounded-xl hover:bg-indigo-50"
+                onClick={handleRegister}
+                disabled={loading}
+              >
+                Зарегистрироваться
+              </button>
             </div>
 
-            {/* Кнопка "Продолжить" */}
-            <button
-              className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={() => {
-                // Здесь будет логика отправки
-                alert('Форма отправлена (имитация)');
-                closeLogin();
-              }}
-            >
-              Продолжить
-            </button>
           </div>
         </div>
       )}
       {/* Оверлей */}
-      {(isMenuOpen || isLoginOpen) && (
-        <div className="fixed inset-0 bg-black/50 z-[999] md:hidden" onClick={closeMenu}></div>
+      {(isMenuOpen) && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[999]"
+          onClick={() => {
+            if (isMenuOpen) closeMenu();
+          }}
+        />
+      )}
+      {(isLoginOpen) && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[1000]"
+          onClick={() => {
+            if (isLoginOpen) closeLogin();
+          }}
+        />
       )}
     </header>
   );

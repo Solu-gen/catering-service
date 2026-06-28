@@ -52,7 +52,7 @@ const Carousel = ({ slides, autoPlayInterval = 5000 }) => {
             ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         >
           <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
-          <div class="absolute inset-0 bg-gradient-to-br from-violet-500/40 to-purple-500/40 mix-blend-overlay"></div>
+          <div class="absolute inset-0 bg-purple-500/50 mix-blend-overlay"></div>
           <div className="absolute inset-x-0 bottom-0 p-8 sm:p-16 bg-gradient-to-t from-stone-800 via-stone-450 to-transparent">
             <h3 className="text-white text-3xl md:text-4xl font-bold mb-2 sm:mb-3">{slide.title}</h3>
             <p className="text-gray-200 text-sm sm:text-lg md:text-lg max-w-2xl">{slide.description}</p>
@@ -73,7 +73,7 @@ const Carousel = ({ slides, autoPlayInterval = 5000 }) => {
 
       <button
         onClick={nextSlide}
-        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-[rgba(146,141,141,0.5)] backdrop-blur-md rounded-full flex items-center justify-center z-20 text-white touch-manipulation duration-300"
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-[rgba(146,141,141,0.5)] backdrop-blur-md rounded-full flex items-center justify-center z-20 text-white touch-manipulation duration-300"
         aria-label="Следующий" >
          <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
