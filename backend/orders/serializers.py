@@ -42,6 +42,8 @@ class OrderDetailSerializer(serializers.ModelSerializer):
             'total_price',
             'address',
             'delivery_time',
+            'customer_name',
+            'customer_phone',
             'comment',
             'payment_date',
             'created_at',
@@ -52,6 +54,8 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 class CreateOrderSerializer(serializers.Serializer):
     address = serializers.CharField()
     delivery_time = serializers.DateTimeField()
+    customer_name = serializers.CharField(required=False, allow_blank=True)
+    customer_phone = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     comment = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     items = OrderItemInputSerializer(many=True)
 

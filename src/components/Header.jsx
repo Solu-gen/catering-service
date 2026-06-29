@@ -211,7 +211,7 @@ const Header = () => {
 
 
   return (
-    <header className="sticky top-0 bg-stone-100 z-[1000]">
+    <header className="sticky top-0 bg-stone-100 z-[1000] text-gray-900">
       <div className="flex items-center px-4 mx-auto sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 lg:h-[72px] w-full">
           {/* Логотип */}
@@ -227,7 +227,7 @@ const Header = () => {
             className={`fixed top-0 right-0 h-full w-full sm:w-[50%] bg-stone-100 md:w-full z-[1000] transform transition-transform duration-300
               ${isMenuOpen ? "translate-x-0" : "translate-x-full md:translate-x-0 md:static md:w-auto md:h-auto"}`}
           >
-            <ul className="text-lg flex flex-col md:text-center max-[768px]:pl-[12%] text-gray-900 mt-16 md:mt-0 md:flex-row md:space-x-8 xl:ml-6 xl:space-x-10">
+            <ul className="text-lg flex flex-col md:text-center max-[768px]:pl-[12%] mt-16 md:mt-0 md:flex-row md:space-x-8 xl:ml-6 xl:space-x-10">
               {/*<ul className="flex flex-col text-center pt-20 px-6 gap-0 md:flex md:justify-start md:ml-8 md:space-x-8 xl:ml-16 xl:space-x-10 md:pt-0 md:px-0">*/}
               <li className="md:hidden">
                 {/*<button
@@ -241,13 +241,13 @@ const Header = () => {
                 </button>*/}
 
                 {user ? (
-                  <span className="text-lg font-medium text-indigo-600">
+                  <a href="profile-page.html" className="whitespace-nowrap text-lg font-medium hover:text-indigo-600" title="ЛИЧНЫЙ КАБИНЕТ">
                     ЛИЧНЫЙ КАБИНЕТ
-                  </span>
+                  </a>
                 ) : (
                   <button
                     onClick={toggleLogin}
-                    className="text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600"
+                    className="text-lg font-medium   transition-all duration-200 rounded hover:text-indigo-600"
                   >
                     ВОЙТИ
                   </button>
@@ -276,14 +276,14 @@ const Header = () => {
                   КОНТАКТЫ
                 </a>
               </li>
-              <li className="max-[824px]:hidden lg:block">
+              <li className="max-[768px]:block max-[925px]:hidden lg:block">
                 <a href="fof.html"
                   className={`block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/delivery.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu} >
                   ДОСТАВКА И ОПЛАТА
                 </a>
               </li>
-              <li className="md:hidden lg:block">
+              <li className="max-[768px]:block max-[1030px]:hidden min-[1030px]:block">
                 <a href="index.html#aboutus"
                   className={`block w-full py-4 text-lg font-medium transition-all duration-200 rounded hover:text-indigo-600 hover:pl-2.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 md:border-0 md:py-0 md:hover:pl-0 ${isActive('/about.html') ? 'active text-indigo-600' : ''}`}
                   onClick={closeMenu} >
@@ -303,23 +303,23 @@ const Header = () => {
           {/* Правая часть */}
           <div className="flex items-center justify-self-end ml-auto space-x-8">
             <div className="hidden md:flex lg:items-center lg:space-x-8">
-              <p className="hidden min-[1385px]:block text-lg font-medium text-gray-900 whitespace-nowrap transition-all duration-200 rounded hover:text-indigo-600">
+              <p className="hidden min-[1385px]:block text-lg font-medium   whitespace-nowrap transition-all duration-200 rounded hover:text-indigo-600">
                 +7 (000)-000-00-00
               </p>
               {/*<button
                 onClick={toggleLogin}
-                className="text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                className="text-lg font-medium   transition-all duration-200 rounded hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               >
                 ВОЙТИ
               </button>*/}
               {user ? (
-                <span className="text-lg font-medium whitespace-nowrap text-indigo-600">
+                <a href="profile-page.html" className="whitespace-nowrap text-lg font-medium hover:text-indigo-600" title="ЛИЧНЫЙ КАБИНЕТ">
                   ЛИЧНЫЙ КАБИНЕТ
-                </span>
+                </a>
               ) : (
                 <button
                   onClick={toggleLogin}
-                  className="text-lg font-medium text-gray-900 transition-all duration-200 rounded hover:text-indigo-600"
+                  className="text-lg font-medium   transition-all duration-200 rounded hover:text-indigo-600"
                 >
                   ВОЙТИ
                 </button>
@@ -329,7 +329,7 @@ const Header = () => {
 
             <div className="flex items-center justify-end space-x-5 z-[1001]">
               {/* Корзина */}
-              <a href="cart.html" className="relative p-2 -m-2 text-gray-900 transition-all duration-200 hover:text-indigo-600">
+              <a href="cart.html" className="relative p-2 -m-2   transition-all duration-200 hover:text-indigo-600">
                 <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
@@ -368,7 +368,7 @@ const Header = () => {
             {/* Крестик закрытия */}
             <button
               onClick={closeLogin}
-              className="flex py-4 justify-end text-black hover:text-indigo-600"
+              className="flex py-4 justify-end hover:text-indigo-600"
               aria-label="Закрыть форму входа"
             >
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -10,7 +10,7 @@ const FOFContent = () => {
   return (
     <main class="flex items-center justify-center min-h-screen bg-stone-100">
         <div class="text-center px-4">
-            <h1 class="text-9xl font-bold text-stone-800">FOF</h1>
+            <h1 class="text-9xl font-bold text-stone-800">404</h1>
             <h2 class="text-3xl font-semibold text-stone-700 mt-4">Хмм. Страница не найдена</h2>
             <p class="text-stone-600 mt-2 max-w-md mx-auto">
                 Возможно, эта страница была удалена или перемещена. Попробуйте

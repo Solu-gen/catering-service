@@ -1,5 +1,8 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status
+
+from rest_framework import generics
+from rest_framework import permissions
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -10,7 +13,11 @@ from .serializers import (
     OrderListSerializer,
     StatusUpdateSerializer,
 )
-from .services import mark_order_paid, update_order_status
+
+from .services import (
+    mark_order_paid,
+    update_order_status,
+)
 
 
 class OrderCreateAPIView(generics.GenericAPIView):
@@ -18,17 +25,15 @@ class OrderCreateAPIView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         order = serializer.save()
+
         return Response(
-            {
-                'id': order.id,
-                'status': order.status,
-                'status_display': order.get_status_display(),
-                'total_price': order.total_price,
-            },
-            status=status.HTTP_201_CREATED,
+            OrderDetailSerializer(order).data,
+            status=status.HTTP_201_CREATED
         )
 
 
@@ -37,7 +42,11 @@ class OrderHistoryAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).prefetch_related('items__product')
+        return (
+            Order.objects
+            .filter(user=self.request.user)
+            .prefetch_related("items__product")
+        )
 
 
 class OrderDetailAPIView(generics.RetrieveAPIView):
@@ -45,32 +54,66 @@ class OrderDetailAPIView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).prefetch_related('items__product')
+        return (
+            Order.objects
+            .filter(user=self.request.user)
+            .prefetch_related("items__product")
+        )
 
 
 class OrderPayAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        order = get_object_or_404(Order, pk=pk, user=request.user)
+
+        order = get_object_or_404(
+            Order,
+            pk=pk,
+            user=request.user
+        )
+
         try:
             order = mark_order_paid(order)
+
         except ValueError as exc:
-            return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(OrderDetailSerializer(order).data, status=status.HTTP_200_OK)
+            return Response(
+                {"detail": str(exc)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            OrderDetailSerializer(order).data,
+            status=status.HTTP_200_OK
+        )
 
 
 class OrderStatusUpdateAPIView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
     def put(self, request, pk):
+
         order = get_object_or_404(Order, pk=pk)
-        serializer = StatusUpdateSerializer(data=request.data, context={'order': order})
+
+        serializer = StatusUpdateSerializer(
+            data=request.data,
+            context={"order": order}
+        )
+
         serializer.is_valid(raise_exception=True)
 
         try:
-            order = update_order_status(order, serializer.validated_data['status'])
-        except ValueError as exc:
-            return Response({'detail': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            order = update_order_status(
+                order,
+                serializer.validated_data["status"]
+            )
 
-        return Response(OrderDetailSerializer(order).data, status=status.HTTP_200_OK)
+        except ValueError as exc:
+            return Response(
+                {"detail": str(exc)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            OrderDetailSerializer(order).data,
+            status=status.HTTP_200_OK
+        )

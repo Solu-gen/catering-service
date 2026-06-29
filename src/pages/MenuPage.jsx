@@ -6,19 +6,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import '../context/style.css';
-/*
-const products = [
-  { id: 1, title: "БРУСКЕТТА №1", category: "Брускетты", image: "menu-img/img1.jpg" },
-  { id: 2, title: "БРУСКЕТТА №2", category: "Брускетты", image: "menu-img/img2.jpg" },
-  { id: 3, title: "БРУСКЕТТА №3", category: "Брускетты", image: "menu-img/img3.jpg" },
-  { id: 4, title: "КАНАПЕ №1", category: "Канапе", image: "menu-img/can1.jpg" },
-  { id: 5, title: "КАНАПЕ №2", category: "Канапе", image: "menu-img/can2.jpg" },
-  { id: 6, title: "КАНАПЕ №3", category: "Канапе", image: "menu-img/can3.jpg" },
-  { id: 7, title: "ТАРТАЛЕТКИ №1", category: "Тарталетки", image: "menu-img/tar1.jpg" },
-  { id: 8, title: "ТАРТАЛЕТКИ №2", category: "Тарталетки", image: "menu-img/tar2.jpg" },
-  { id: 9, title: "ТАРТАЛЕТКИ №3", category: "Тарталетки", image: "menu-img/tar3.jpg" },
-];*/
-
 
 const MenuPage = () => {
   const [products, setProducts] = useState([]);
@@ -31,9 +18,15 @@ const MenuPage = () => {
 
   // фильтрация
   const filteredProducts = useMemo(() => {
-    if (filter === "Все") return products;
+    if (filter === "Все") {
+      return products;
+    }
     return products.filter((p) => p.category === filter);
-  }, [filter]);
+  }, [filter, products]);
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
+
 
   return (
     <CartProvider>
@@ -53,7 +46,7 @@ const MenuPage = () => {
           </div>
 
           {/* Сетка */}
-          <ProductGrid products={filteredProducts}/>
+          <ProductGrid products={filteredProducts} />
         </div>
       </main>
       <Footer />

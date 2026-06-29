@@ -28,8 +28,8 @@ const FAQContent = () => {
   ];
 
   return (
-    <main class="p-4 bg-stone-100 lg:p-8 mx-auto sm:px-6 xl:px-12">
-        <h1 class="text-3xl md:text-4xl font-bold mb-8">FAQ - ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</h1>
+    <main class="p-4 bg-stone-100 lg:p-8 sm:px-6 xl:px-12">
+        <h1 class="text-3xl font-bold mb-8">FAQ - ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</h1>
         <div class="grid grid-cols-1 gap-y-8 lg:gap-x-4 lg:grid-cols-3 xl:gap-8 pb-8 ">
             <div class="col-span-2 space-y-4" id="faqAccordion">
                 <Accordion items={faqItems} />
@@ -65,12 +65,9 @@ const FAQContent = () => {
                                     ОСТАВИТЬ ЗАЯВКУ</button>
                             </form>
                         </div>
-                        <div class="relative overflow-hidden h-full w-full">
-                            <img src="" alt="report" class="absolute bg-white"/>
-                        </div>
                     </div>
                     <div class="lg:w-full min-h-[30vh] lg:h-full relative">
-                        <img src="assets/img/img12.jpg" alt="ОСТАВИТЬ ЗАЯВКУ"
+                        <img src="home-img/img12.jpg" alt="ОСТАВИТЬ ЗАЯВКУ"
                             class="absolute inset-0 w-full h-full object-cover" />
                         <div class="absolute inset-0 bg-purple-400/40 mix-blend-overlay">
                         </div>

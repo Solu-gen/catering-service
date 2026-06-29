@@ -1,32 +1,34 @@
 import { useState, useEffect, useMemo } from "react";
 import { useCart } from "../context/CartContext";
-import { CartProvider } from '../context/CartContext';
-import Header from '../components/Header';
+import { CartProvider } from "../context/CartContext";
+import Header from "../components/Header";
 import Footer from "../components/Footer";
-import ScrollToTopButton from '../components/ScrollToTopButton';
-import '../context/style.css';
+import ScrollToTopButton from "../components/ScrollToTopButton";
+import "../context/style.css";
 
-// Основной контент страницы
+
 const CartPageContent = () => {
-    const { cart, updateCount, clearCart } = useCart();
-
+    const { cart, updateCount } = useCart();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+
     const [error, setError] = useState(null);
+    const clearCart = () => {
+        setCart({});
+        localStorage.removeItem("cart");
+    };
 
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const response = await fetch(
-                    "http://127.0.0.1:8000/api/products/"
-                );
+                const response = await fetch("http://127.0.0.1:8000/api/products/");
+
 
                 if (!response.ok) {
                     throw new Error("Ошибка загрузки меню");
                 }
 
                 const data = await response.json();
-
                 setProducts(data);
             } catch (err) {
                 setError(err.message);
@@ -34,18 +36,15 @@ const CartPageContent = () => {
                 setLoading(false);
             }
         };
-
         loadProducts();
     }, []);
-
 
     const cartItems = products.filter((product) => cart[product.id]);
 
     const totalPrice = useMemo(() => {
-        return cartItems.reduce(
-            (sum, item) => sum + item.price * cart[item.id],
-            0
-        );
+        return cartItems.reduce((sum, item) => {
+            return sum + Number(item.price) * cart[item.id];
+        }, 0);
     }, [cartItems, cart]);
 
     const [deliveryType, setDeliveryType] = useState("delivery");
@@ -60,61 +59,90 @@ const CartPageContent = () => {
         phone: "",
     });
 
+
     const handleSubmit = async () => {
         try {
-            const token = localStorage.getItem("access");
+            const token =
+                localStorage.getItem("access_token") ||
+                localStorage.getItem("access");
+
+
+            if (!token) {
+                alert("Сначала войдите в систему");
+                return;
+            }
+
+
+            if (cartItems.length === 0) {
+                alert("Корзина пуста");
+                return;
+            }
+
+
+            if (!formData.street.trim()) {
+                alert("Введите адрес доставки");
+                return;
+            }
+
+
+            if (!formData.date || !formData.time) {
+                alert("Укажите дату и время доставки");
+                return;
+            }
+
+
+            const address = `${formData.street}${formData.apartment ? `, кв./офис ${formData.apartment}` : ""
+                }`;
+
+
+            const deliveryTime = `${formData.date}T${formData.time}:00`;
+
 
             const orderData = {
-                delivery_type: deliveryType,
-
-                address: {
-                    street: formData.street,
-                    apartment: formData.apartment,
-                },
-
-                comment: formData.comment,
-
-                delivery_date: formData.date,
-                delivery_time: formData.time,
-
+                address,
+                delivery_time: deliveryTime,
                 customer_name: formData.name,
-                phone: formData.phone,
-
+                customer_phone: formData.phone,
+                comment: formData.comment,
                 items: cartItems.map((item) => ({
                     product_id: item.id,
                     quantity: cart[item.id],
                 })),
             };
 
-            const response = await fetch(
-                "http://127.0.0.1:8000/api/orders/",
-                {
-                    method: "POST",
 
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
+            const response = await fetch("http://127.0.0.1:8000/api/orders/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(orderData),
+            });
 
-                    body: JSON.stringify(orderData),
-                }
-            );
+
+            const data = await response.json();
+
 
             if (!response.ok) {
-                throw new Error("Ошибка создания заказа");
+                console.error(data);
+                throw new Error(data.detail || JSON.stringify(data));
             }
 
-            const order = await response.json();
+
+            alert(`Заказ №${data.id} успешно создан`);
+
 
             clearCart();
 
-            window.location.href =
-                `payment.html?order=${order.id}`;
 
+            window.location.href = `payment.html?order=${data.id}`;
         } catch (error) {
+            console.error(error);
             alert(error.message);
         }
     };
+
 
     if (loading) {
         return (
@@ -123,6 +151,7 @@ const CartPageContent = () => {
             </div>
         );
     }
+
 
     if (error) {
         return (
@@ -134,11 +163,10 @@ const CartPageContent = () => {
 
 
     return (
-        <div className="bg-stone-100 min-h-screen">
-            <div className="max-w-7xl mx-auto px-6 py-10">
-                <h1 className="text-4xl font-bold text-gray-900 mb-3">
-                    Корзина
-                </h1>
+        <main className="bg-stone-100">
+            <div className="w-full px-4 pt-2 pb-8 lg:px-8 sm:px-6 xl:px-12">
+                <h1 className="text-3xl font-bold text-gray-900 mb-3">Корзина</h1>
+
 
                 <button
                     onClick={clearCart}
@@ -147,17 +175,16 @@ const CartPageContent = () => {
                     Очистить корзину
                 </button>
 
+
                 <div className="grid lg:grid-cols-3 gap-8">
-
-                    {/* ЛЕВАЯ ЧАСТЬ */}
                     <div className="lg:col-span-2 bg-white rounded-xl p-6">
-
                         <div className="hidden md:grid grid-cols-4 gap-4 text-sm font-semibold text-gray-500 mb-5">
                             <div></div>
                             <div>Цена за 1 шт.</div>
                             <div>Количество</div>
                             <div>Итого</div>
                         </div>
+
 
                         {cartItems.length === 0 ? (
                             <div className="py-16 text-center text-gray-500">
@@ -170,8 +197,6 @@ const CartPageContent = () => {
                                     className="border-t border-gray-200 py-6"
                                 >
                                     <div className="grid md:grid-cols-4 gap-4 items-center">
-
-                                        {/* Товар */}
                                         <div className="flex gap-4">
                                             <img
                                                 src={item.image}
@@ -179,19 +204,20 @@ const CartPageContent = () => {
                                                 className="w-24 h-24 rounded-lg object-cover"
                                             />
 
+
                                             <div>
                                                 <h3 className="font-semibold text-lg">
                                                     {item.title}
                                                 </h3>
 
+
                                                 <p className="text-sm text-gray-500">
-                                                    {item.weight}
+                                                    {item.weight} г
                                                 </p>
 
+
                                                 <button
-                                                    onClick={() =>
-                                                        updateCount(item.id, 0)
-                                                    }
+                                                    onClick={() => updateCount(item.id, 0)}
                                                     className="text-indigo-600 text-sm mt-2 hover:underline"
                                                 >
                                                     Удалить
@@ -199,41 +225,36 @@ const CartPageContent = () => {
                                             </div>
                                         </div>
 
-                                        {/* Цена */}
+
                                         <div className="font-medium">
                                             {item.price} ₽
                                         </div>
 
-                                        {/* Количество */}
+
                                         <div>
                                             <div className="inline-flex border rounded-lg overflow-hidden">
-
                                                 <button
                                                     className="px-4 py-2 hover:bg-gray-100"
                                                     onClick={() =>
                                                         updateCount(
                                                             item.id,
-                                                            Math.max(
-                                                                1,
-                                                                cart[item.id] - 1
-                                                            )
+                                                            Math.max(1, cart[item.id] - 1)
                                                         )
                                                     }
                                                 >
                                                     -
                                                 </button>
 
+
                                                 <div className="px-5 py-2 border-x">
                                                     {cart[item.id]}
                                                 </div>
 
+
                                                 <button
                                                     className="px-4 py-2 hover:bg-gray-100"
                                                     onClick={() =>
-                                                        updateCount(
-                                                            item.id,
-                                                            cart[item.id] + 1
-                                                        )
+                                                        updateCount(item.id, cart[item.id] + 1)
                                                     }
                                                 >
                                                     +
@@ -241,9 +262,9 @@ const CartPageContent = () => {
                                             </div>
                                         </div>
 
-                                        {/* Сумма */}
+
                                         <div className="font-semibold">
-                                            {item.price * cart[item.id]} ₽
+                                            {Number(item.price) * cart[item.id]} ₽
                                         </div>
                                     </div>
                                 </div>
@@ -251,52 +272,40 @@ const CartPageContent = () => {
                         )}
                     </div>
 
-                    {/* ПРАВАЯ ЧАСТЬ */}
-                    <div className="space-y-6">
 
-                        {/* Способ доставки */}
+                    <div className="space-y-6">
                         <div className="bg-white rounded-xl p-6">
-                            <h2 className="text-2xl font-bold mb-4">
-                                Способ доставки
-                            </h2>
+                            <h2 className="text-2xl font-bold mb-4">Способ доставки</h2>
+
 
                             <div className="space-y-3">
-
                                 <label className="flex items-center gap-3 cursor-pointer">
                                     <input
                                         type="radio"
                                         checked={deliveryType === "delivery"}
-                                        onChange={() =>
-                                            setDeliveryType("delivery")
-                                        }
+                                        onChange={() => setDeliveryType("delivery")}
                                     />
-
                                     <span>Доставка</span>
                                 </label>
+
 
                                 <label className="flex items-center gap-3 cursor-pointer">
                                     <input
                                         type="radio"
                                         checked={deliveryType === "pickup"}
-                                        onChange={() =>
-                                            setDeliveryType("pickup")
-                                        }
+                                        onChange={() => setDeliveryType("pickup")}
                                     />
-
                                     <span>Самовывоз</span>
                                 </label>
-
                             </div>
                         </div>
 
-                        {/* Адрес */}
+
                         <div className="bg-white rounded-xl p-6">
-                            <h2 className="text-2xl font-bold mb-6">
-                                Адрес доставки
-                            </h2>
+                            <h2 className="text-2xl font-bold mb-6">Адрес доставки</h2>
+
 
                             <div className="space-y-4">
-
                                 <input
                                     type="text"
                                     placeholder="Улица, номер дома"
@@ -307,8 +316,9 @@ const CartPageContent = () => {
                                             street: e.target.value,
                                         })
                                     }
-                                    className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                 />
+
 
                                 <input
                                     type="text"
@@ -320,8 +330,9 @@ const CartPageContent = () => {
                                             apartment: e.target.value,
                                         })
                                     }
-                                    className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                 />
+
 
                                 <textarea
                                     rows="4"
@@ -333,23 +344,24 @@ const CartPageContent = () => {
                                             comment: e.target.value,
                                         })
                                     }
-                                    className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                 />
                             </div>
                         </div>
 
-                        {/* Дата и время */}
+
                         <div className="bg-white rounded-xl p-6">
                             <h2 className="text-2xl font-bold mb-6">
                                 Дата и время доставки
                             </h2>
 
-                            <div className="grid md:grid-cols-2 gap-4">
 
+                            <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block mb-2 text-sm">
                                         Дата доставки
                                     </label>
+
 
                                     <input
                                         type="date"
@@ -360,14 +372,16 @@ const CartPageContent = () => {
                                                 date: e.target.value,
                                             })
                                         }
-                                        className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     />
                                 </div>
+
 
                                 <div>
                                     <label className="block mb-2 text-sm">
                                         Время доставки
                                     </label>
+
 
                                     <input
                                         type="time"
@@ -378,25 +392,25 @@ const CartPageContent = () => {
                                                 time: e.target.value,
                                             })
                                         }
-                                        className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     />
                                 </div>
-
                             </div>
                         </div>
 
-                        {/* Контакты */}
+
                         <div className="bg-white rounded-xl p-6">
                             <h2 className="text-2xl font-bold mb-6">
                                 Контактные данные
                             </h2>
 
-                            <div className="space-y-4">
 
+                            <div className="space-y-4">
                                 <div>
                                     <label className="block mb-2">
                                         Имя Фамилия *
                                     </label>
+
 
                                     <input
                                         type="text"
@@ -407,14 +421,16 @@ const CartPageContent = () => {
                                                 name: e.target.value,
                                             })
                                         }
-                                        className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     />
                                 </div>
+
 
                                 <div>
                                     <label className="block mb-2">
                                         Телефон *
                                     </label>
+
 
                                     <input
                                         type="tel"
@@ -428,28 +444,19 @@ const CartPageContent = () => {
                                         placeholder="+7 (___) ___-__-__"
                                         className="w-full border border-gray-300 rounded-lg px-4 py-3"
                                     />
-
-                                    <p className="text-xs text-gray-500 mt-1">
-                                        Телефон должен начинаться с +7
-                                    </p>
                                 </div>
-
                             </div>
                         </div>
 
-                        {/* Итоги */}
+
                         <div className="bg-white rounded-xl p-6">
                             <div className="flex justify-between mb-4">
                                 <span>Товаров:</span>
-
-                                <span>
-                                    {cartItems.length}
-                                </span>
+                                <span>{cartItems.length}</span>
                             </div>
 
                             <div className="flex justify-between text-xl font-bold mb-6">
                                 <span>Итого:</span>
-
                                 <span>{totalPrice} ₽</span>
                             </div>
 
@@ -460,16 +467,14 @@ const CartPageContent = () => {
                                 Подтвердить заказ
                             </button>
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     );
-}
-    ;
+};
 
-// Корневой компонент для этой страницы
+
 const CartPage = () => {
     return (
         <CartProvider>
@@ -480,5 +485,6 @@ const CartPage = () => {
         </CartProvider>
     );
 };
+
 
 export default CartPage;
