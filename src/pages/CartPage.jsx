@@ -8,15 +8,10 @@ import "../context/style.css";
 
 
 const CartPageContent = () => {
-    const { cart, updateCount } = useCart();
+    const { cart, updateCount, clearCart } = useCart();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-
     const [error, setError] = useState(null);
-    const clearCart = () => {
-        setCart({});
-        localStorage.removeItem("cart");
-    };
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -128,13 +123,9 @@ const CartPageContent = () => {
                 console.error(data);
                 throw new Error(data.detail || JSON.stringify(data));
             }
-
-
             alert(`Заказ №${data.id} успешно создан`);
 
-
             clearCart();
-
 
             window.location.href = `payment.html?order=${data.id}`;
         } catch (error) {
@@ -142,7 +133,6 @@ const CartPageContent = () => {
             alert(error.message);
         }
     };
-
 
     if (loading) {
         return (
@@ -152,7 +142,6 @@ const CartPageContent = () => {
         );
     }
 
-
     if (error) {
         return (
             <div className="min-h-screen flex items-center justify-center text-red-600">
@@ -161,20 +150,16 @@ const CartPageContent = () => {
         );
     }
 
-
     return (
         <main className="bg-stone-100">
             <div className="w-full px-4 pt-2 pb-8 lg:px-8 sm:px-6 xl:px-12">
                 <h1 className="text-3xl font-bold text-gray-900 mb-3">Корзина</h1>
-
-
                 <button
                     onClick={clearCart}
                     className="text-indigo-600 hover:text-indigo-900 mb-8"
                 >
                     Очистить корзину
                 </button>
-
 
                 <div className="grid lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 bg-white rounded-xl p-6">
@@ -184,7 +169,6 @@ const CartPageContent = () => {
                             <div>Количество</div>
                             <div>Итого</div>
                         </div>
-
 
                         {cartItems.length === 0 ? (
                             <div className="py-16 text-center text-gray-500">
@@ -204,17 +188,13 @@ const CartPageContent = () => {
                                                 className="w-24 h-24 rounded-lg object-cover"
                                             />
 
-
                                             <div>
                                                 <h3 className="font-semibold text-lg">
                                                     {item.title}
                                                 </h3>
-
-
                                                 <p className="text-sm text-gray-500">
                                                     {item.weight} г
                                                 </p>
-
 
                                                 <button
                                                     onClick={() => updateCount(item.id, 0)}
@@ -225,11 +205,9 @@ const CartPageContent = () => {
                                             </div>
                                         </div>
 
-
                                         <div className="font-medium">
                                             {item.price} ₽
                                         </div>
-
 
                                         <div>
                                             <div className="inline-flex border rounded-lg overflow-hidden">
@@ -245,11 +223,9 @@ const CartPageContent = () => {
                                                     -
                                                 </button>
 
-
                                                 <div className="px-5 py-2 border-x">
                                                     {cart[item.id]}
                                                 </div>
-
 
                                                 <button
                                                     className="px-4 py-2 hover:bg-gray-100"
@@ -262,7 +238,6 @@ const CartPageContent = () => {
                                             </div>
                                         </div>
 
-
                                         <div className="font-semibold">
                                             {Number(item.price) * cart[item.id]} ₽
                                         </div>
@@ -272,12 +247,9 @@ const CartPageContent = () => {
                         )}
                     </div>
 
-
                     <div className="space-y-6">
                         <div className="bg-white rounded-xl p-6">
                             <h2 className="text-2xl font-bold mb-4">Способ доставки</h2>
-
-
                             <div className="space-y-3">
                                 <label className="flex items-center gap-3 cursor-pointer">
                                     <input
@@ -287,7 +259,6 @@ const CartPageContent = () => {
                                     />
                                     <span>Доставка</span>
                                 </label>
-
 
                                 <label className="flex items-center gap-3 cursor-pointer">
                                     <input
@@ -300,10 +271,8 @@ const CartPageContent = () => {
                             </div>
                         </div>
 
-
                         <div className="bg-white rounded-xl p-6">
                             <h2 className="text-2xl font-bold mb-6">Адрес доставки</h2>
-
 
                             <div className="space-y-4">
                                 <input
@@ -319,7 +288,6 @@ const CartPageContent = () => {
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                 />
 
-
                                 <input
                                     type="text"
                                     placeholder="Квартира / офис"
@@ -332,8 +300,6 @@ const CartPageContent = () => {
                                     }
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                 />
-
-
                                 <textarea
                                     rows="4"
                                     placeholder="Комментарий"
@@ -354,17 +320,13 @@ const CartPageContent = () => {
                             <h2 className="text-2xl font-bold mb-6">
                                 Дата и время доставки
                             </h2>
-
-
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block mb-2 text-sm">
                                         Дата доставки
                                     </label>
 
-
-                                    <input
-                                        type="date"
+                                    <input type="date"
                                         value={formData.date}
                                         onChange={(e) =>
                                             setFormData({
@@ -376,15 +338,12 @@ const CartPageContent = () => {
                                     />
                                 </div>
 
-
                                 <div>
                                     <label className="block mb-2 text-sm">
                                         Время доставки
                                     </label>
 
-
-                                    <input
-                                        type="time"
+                                    <input type="time"
                                         value={formData.time}
                                         onChange={(e) =>
                                             setFormData({
@@ -398,22 +357,15 @@ const CartPageContent = () => {
                             </div>
                         </div>
 
-
                         <div className="bg-white rounded-xl p-6">
-                            <h2 className="text-2xl font-bold mb-6">
-                                Контактные данные
-                            </h2>
-
-
+                            <h2 className="text-2xl font-bold mb-6">Контактные данные</h2>
                             <div className="space-y-4">
                                 <div>
                                     <label className="block mb-2">
                                         Имя Фамилия *
                                     </label>
 
-
-                                    <input
-                                        type="text"
+                                    <input type="text"
                                         value={formData.name}
                                         onChange={(e) =>
                                             setFormData({
@@ -425,15 +377,10 @@ const CartPageContent = () => {
                                     />
                                 </div>
 
-
                                 <div>
-                                    <label className="block mb-2">
-                                        Телефон *
-                                    </label>
+                                    <label className="block mb-2">Телефон *</label>
 
-
-                                    <input
-                                        type="tel"
+                                    <input type="tel"
                                         value={formData.phone}
                                         onChange={(e) =>
                                             setFormData({
@@ -447,7 +394,6 @@ const CartPageContent = () => {
                                 </div>
                             </div>
                         </div>
-
 
                         <div className="bg-white rounded-xl p-6">
                             <div className="flex justify-between mb-4">

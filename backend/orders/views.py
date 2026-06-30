@@ -5,6 +5,9 @@ from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+
 
 from .models import Order
 from .serializers import (
@@ -13,6 +16,31 @@ from .serializers import (
     OrderListSerializer,
     StatusUpdateSerializer,
 )
+
+class OrderViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+        return Order.objects.filter(
+            user=self.request.user
+        ).prefetch_related("items")
+
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return OrderListSerializer
+
+
+        if self.action == "retrieve":
+            return OrderDetailSerializer
+
+
+        if self.action == "create":
+            return CreateOrderSerializer
+
+
+        return OrderDetailSerializer
 
 from .services import (
     mark_order_paid,
