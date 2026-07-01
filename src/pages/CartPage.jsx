@@ -54,45 +54,33 @@ const CartPageContent = () => {
         phone: "",
     });
 
-
     const handleSubmit = async () => {
         try {
             const token =
                 localStorage.getItem("access_token") ||
                 localStorage.getItem("access");
 
-
             if (!token) {
                 alert("Сначала войдите в систему");
                 return;
             }
 
-
             if (cartItems.length === 0) {
                 alert("Корзина пуста");
                 return;
             }
-
-
             if (!formData.street.trim()) {
                 alert("Введите адрес доставки");
                 return;
             }
 
-
             if (!formData.date || !formData.time) {
                 alert("Укажите дату и время доставки");
                 return;
             }
-
-
             const address = `${formData.street}${formData.apartment ? `, кв./офис ${formData.apartment}` : ""
                 }`;
-
-
             const deliveryTime = `${formData.date}T${formData.time}:00`;
-
-
             const orderData = {
                 address,
                 delivery_time: deliveryTime,
@@ -104,8 +92,6 @@ const CartPageContent = () => {
                     quantity: cart[item.id],
                 })),
             };
-
-
             const response = await fetch("http://127.0.0.1:8000/api/orders/", {
                 method: "POST",
                 headers: {
@@ -114,10 +100,7 @@ const CartPageContent = () => {
                 },
                 body: JSON.stringify(orderData),
             });
-
-
             const data = await response.json();
-
 
             if (!response.ok) {
                 console.error(data);
@@ -273,7 +256,6 @@ const CartPageContent = () => {
 
                         <div className="bg-white rounded-xl p-6">
                             <h2 className="text-2xl font-bold mb-6">Адрес доставки</h2>
-
                             <div className="space-y-4">
                                 <input
                                     type="text"
@@ -397,7 +379,7 @@ const CartPageContent = () => {
 
                         <div className="bg-white rounded-xl p-6">
                             <div className="flex justify-between mb-4">
-                                <span>Товаров:</span>
+                                <span>Позиций:</span>
                                 <span>{cartItems.length}</span>
                             </div>
 

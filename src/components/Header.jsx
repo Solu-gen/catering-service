@@ -241,15 +241,21 @@ const Header = () => {
                 </button>*/}
 
                 {user ? (
-                  <a href="profile-page.html" className="whitespace-nowrap text-lg font-medium hover:text-indigo-600" title="ЛИЧНЫЙ КАБИНЕТ">
+                  <a href="profile-page.html" className="flex items-center border-y border-gray-200 py-4 whitespace-nowrap text-lg font-medium hover:text-indigo-600" title="ЛИЧНЫЙ КАБИНЕТ">
                     ЛИЧНЫЙ КАБИНЕТ
+                    <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
                   </a>
                 ) : (
                   <button
                     onClick={toggleLogin}
-                    className="text-lg font-medium   transition-all duration-200 rounded hover:text-indigo-600"
+                    className="text-lg font-medium flex items-center border-y border-gray-200 py-4 transition-all duration-200 rounded hover:text-indigo-600"
                   >
                     ВОЙТИ
+                    <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
                   </button>
                 )}
 
