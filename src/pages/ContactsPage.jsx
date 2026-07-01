@@ -1,12 +1,11 @@
-//import React from 'react';
 import { CartProvider } from '../context/CartContext';
 import Header from '../components/Header';
 import Footer from "../components/Footer";
-//import { useCart } from '../context/CartContext';
+import ScrollToTopButton from '../components/ScrollToTopButton';
+import '../context/style.css';
 
 // Основной контент страницы
 const ContactsPageContent = () => {
-  //const { addToCart } = useCart();
 
   return (
     <main class="p-4 bg-stone-100 lg:p-8 mx-auto sm:px-6 xl:px-12">
@@ -139,6 +138,7 @@ const ContactsPage = () => {
       <Header />
       <ContactsPageContent />
       <Footer />
+      <ScrollToTopButton />
     </CartProvider>
   );
 };

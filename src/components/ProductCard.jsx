@@ -1,4 +1,3 @@
-// src/components/ProductCard.jsx
 import { useState } from "react";
 import { useCart } from '../context/CartContext';
 
@@ -9,14 +8,11 @@ function ProductCard({ product, count }) {
   const inCart = count > 0;
 
   return (
-    <div
-      className="h-[52vh] transition-all duration-400"
+    <div className="h-[52vh] transition-all duration-400"
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
+      onMouseLeave={() => setHovered(false)} >
       <div className="flex justify-center">
-        <img
-          src={product.image}
+        <img src={product.image}
           alt={product.title}
           className={`rounded-xl overflow-hidden transition-all duration-500 ${
             hovered ? "h-[24vh] w-[70%]" : "h-[43vh] w-[100%]"
@@ -44,27 +40,21 @@ function ProductCard({ product, count }) {
           <div className="font-bold text-xl ml-3 lg:ml-6">2914 ₽</div>
 
           {!inCart ? (
-            <button
-              onClick={() => addToCart(product.id)}
-              className="font-medium text-lg text-center w-[55%] lg:w-[50%] border-2 rounded-xl py-2 mr-3 lg:mr-6 lg:py-3 hover:bg-stone-400 hover:text-white"
-            >
+            <button onClick={() => addToCart(product.id)}
+              className="font-medium text-lg text-center w-[55%] lg:w-[50%] border-2 rounded-xl py-2 mr-3 lg:mr-6 lg:py-3 hover:bg-stone-400 hover:text-white" >
               В КОРЗИНУ
             </button>
           ) : (
             <div className="flex items-center justify-between border-2 rounded-xl px-4 py-2 gap-3 w-[50%]">
-              <button
-                className="text-2xl"
-                onClick={() => updateCount(product.id, count - 1)}
-              >
+              <button className="text-2xl"
+                onClick={() => updateCount(product.id, count - 1)} >
                 -
               </button>
 
               <span className="text-xl">{count}</span>
 
-              <button
-                className="text-2xl"
-                onClick={() => updateCount(product.id, count + 1)}
-              >
+              <button className="text-2xl"
+                onClick={() => updateCount(product.id, count + 1)} >
                 +
               </button>
             </div>
