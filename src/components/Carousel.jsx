@@ -48,7 +48,7 @@ const Carousel = ({ slides, autoPlayInterval = 5000 }) => {
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-500
+          className={`absolute inset-0 transition-opacity duration-400
             ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         >
           <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
